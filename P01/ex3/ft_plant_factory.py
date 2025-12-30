@@ -1,5 +1,13 @@
 
 class Plant:
+    """
+    Docstring for Plant
+
+    Attributes:
+        name (str): Name of the plant.
+        height (float): Current height of the plant in centimeters.
+        age (int): Current age of the plant in days.
+    """
     def __init__(self, name, height, age):
         self.name = name
         self.height = height
@@ -8,6 +16,12 @@ class Plant:
 
 
 def ft_listlen(lst: list):
+    """
+    Return the len (number of elements) of a list.
+
+    :param lst: the list whose len must be computed
+    :type lst: list
+    """
     i = 0
     for element in lst:
         i += 1

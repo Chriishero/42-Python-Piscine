@@ -1,5 +1,12 @@
 
 class Plant:
+    """
+    Plant class
+
+    :attribute name: name of the plant
+    :attribute height: height of the plant
+    :attribute age: age of the plant
+    """
     def __init__(self, name, height, age):
         self.name = name
         self.height = height

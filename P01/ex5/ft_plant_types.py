@@ -1,52 +1,102 @@
 
 class Plant:
+    """
+    Simulates a plant
+
+    Attributes:
+        name (str): Name of the plant.
+        height (float): Current height of the plant in centimeters.
+        age (int): Current age of the plant in days.
+    """
     def __init__(self, name, height, age):
         self.name = name
         self.height = height
         self.age = age
 
     def get_info(self):
+        """
+        Print some informations about the plant : name, height and age
+        """
         print(f"{self.name} (Plant): {self.height}cm, {self.age} days")
 
 
 class Flower(Plant):
+    """
+    Simulates a flower that inherits the attributes of the 'Plant' class
+
+    Attributes:
+        color (str): Color of the plant
+    """
     def __init__(self, name, height, age, color):
         super().__init__(name, height, age)
         self.color = color
 
     def bloom(self):
+        """
+        Simulates the blowing of the Flower
+        """
         print(f"{self.name} is blowing beautifully!\n")
 
     def get_info(self):
+        """
+        Print some informations about the flower : name, height, age and color
+        """
         print(f"{self.name} (Flower): {self.height}cm, {self.age} days, "
               "{self.color} color")
 
 
 class Tree(Plant):
+    """
+    Simulates a tree that inherits the attributes of the 'Plant' class
+
+    Attributes:
+        trunk_diameter (int): Diameter of the tree trunk
+    """
     def __init__(self, name, height, age, trunk_diameter):
         super().__init__(name, height, age)
         self.trunk_diameter = trunk_diameter
 
     def produce_shade(self):
+        """
+        Simulates the production of shade on a (computed) area
+        """
         shade_area = (self.age * self.trunk_diameter) / self.height**2 * 200
         print(f"{self.name} provides "
               f"{(shade_area):.0f} square meters of shade\n")
 
     def get_info(self):
+        """
+        Print some informations about the flower : name, height, age
+        and trunk diameter
+        """
         print(f"{self.name} (Tree): {self.height}cm, {self.age} days, "
               "{self.trunk_diameter} diameter")
 
 
 class Vegetable(Plant):
+    """
+    Simulates a vegetable that inherits the attributes of the 'Plant' class
+
+    Attributes:
+        harvest_season (str): harvest season of the vegetable
+        nutritional_value (str): nutritional value (only one)
+    """
     def __init__(self, name, height, age, harvest_season, nutritional_value):
         super().__init__(name, height, age)
         self.harvest_season = harvest_season
         self.nutritional_value = nutritional_value
 
     def get_nutritional_value(self):
+        """
+        Print the nutritional value that the vegetable is rich in
+        """
         print(f"{self.name} is rich in {self.nutritional_value}\n")
 
     def get_info(self):
+        """
+        Print some informations about the vegetable : name, height, age
+        and harvent season
+        """
         print(f"{self.name} (Vegetable): {self.height}cm, {self.age} days, "
               "{self.harvest_season} harvest")
 
