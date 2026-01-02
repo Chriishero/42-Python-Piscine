@@ -90,9 +90,10 @@ class Inventory:
         elif rarity:
             self.items[name].rarity = new_value
         elif quantity:
+            old_value = self.items[name].quantity
             self.items[name].quantity = new_value
-            if new_value == 0:
-                self.items.pop(name)
+            self.item_type_count[self.items[name].type] += (new_value
+                                                            - old_value)
         elif value:
             self.items[name].value = new_value
 
@@ -107,7 +108,7 @@ class Inventory:
         print("=== Inventory Analytics ===")
         most_valuable = ["", 0]
         most_items = ["", 0]
-        rarest_items = []
+        rarest_items = {}
         for inventory in inventories:
             if inventory.value > most_valuable[1]:
                 most_valuable[0] = inventory.player_name
@@ -119,20 +120,22 @@ class Inventory:
 
             for name, item_att in inventory.items.items():
                 if item_att.rarity == "rare":
-                    rarest_items.append(name)
+                    rarest_items[name] = True
 
         print(f"Most valuable player: {most_valuable[0]} "
               f"({most_valuable[1]} gold)")
         print(f"Most items: {most_items[0]} ({most_items[1]} items)")
         print("Rarest items: ", end="")
-        for i in range(len(rarest_items)):
+        i = 0
+        for name, _ in rarest_items.items():
             if i + 1 < len(rarest_items):
-                print(f"{rarest_items[i]}, ", end="")
+                print(f"{name}, ", end="")
             else:
-                print(f"{rarest_items[i]}")
+                print(f"{name}")
+            i += 1
 
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     invent1 = Inventory("Alice")
     invent1.add_item("sword", "weapon", "rare", 500, 1)
     invent1.add_item("potion", "consumable", "common", 50, 5)
@@ -140,7 +143,7 @@ if __name__ == "__main__":
     invent2 = Inventory("Bob")
     invent2.add_item("sword", "weapon", "rare", 500, 2)
     invent2.add_item("potion", "consumable", "common", 50, 2)
-    invent2.add_item("magic_ring", "armor", "rare", 200, 1)
+    invent2.add_item("magic_ring", "armor", "rare", 700, 1)
     print("")
     invent1.get_inventory_info()
     invent1.transaction_to(invent2, "potion", 1)
