@@ -15,7 +15,11 @@ class Inventory:
         self.value = 0
 
     def add_item(self, name, type, rarity, value, quantity):
-        attributes = ItemAttributes(type, rarity, value, quantity)
+        if self.items.get(name):
+            attributes = ItemAttributes(type, rarity, value,
+                                        self.items[name].quantity + quantity)
+        else:
+            attributes = ItemAttributes(type, rarity, value, quantity)
         self.items[name] = attributes
         self.item_type_count[type] += quantity
         self.value += quantity * value
@@ -40,17 +44,104 @@ class Inventory:
             if i + 1 < len(self.items):
                 print(", ", end="")
             else:
-                print("")
+                print("\n")
+
+    def transaction_to(self, to_invent, item_name, quantity):
+        item = self.items[item_name]
+        print(f"=== Transaction: {self.player_name} gives "
+              f"{to_invent.player_name} {quantity} {item_name}s ===")
+        if item.quantity < quantity:
+            print("Transaction failed: "
+                  f"{self.player_name} doesn't have enough {item_name}s")
+        elif quantity <= 0:
+            print("Transaction failed: quantity must be > 0")
+        elif item.quantity >= quantity:
+            to_invent.add_item(item_name, item.type, item.rarity,
+                               item.value, quantity)
+            self.set_item_attribute(name=item_name, quantity=True,
+                                    new_value=item.quantity - quantity)
+            print("Transaction successful!\n")
+            print("=== Updated Inventories ===")
+            print(f"{self.player_name} {item_name}: "
+                  f"{self.get_item_attribute(name=item_name, quantity=True)}")
+            print(f"{to_invent.player_name} {item_name}: "
+                  f"{to_invent.items[item_name].quantity}\n")
+
+    def get_item_attribute(self, name: str, type=False, rarity=False,
+                           quantity=False, value=False):
+        if self.items.get(name):
+            item = self.items[name]
+        else:
+            item = ItemAttributes(0, 0, 0, 0)
+        if type:
+            return item.type
+        elif rarity:
+            return item.rarity
+        elif quantity:
+            return item.quantity
+        elif value:
+            return item.value
+        return name
+
+    def set_item_attribute(self, name=None, type=False, rarity=False,
+                           quantity=False, value=False, new_value=None):
+        if type:
+            self.items[name].type = new_value
+        elif rarity:
+            self.items[name].rarity = new_value
+        elif quantity:
+            self.items[name].quantity = new_value
+            if new_value == 0:
+                self.items.pop(name)
+        elif value:
+            self.items[name].value = new_value
+
+    def get_items_count(self):
+        count = 0
+        for t, c in self.item_type_count.items():
+            count += c
+        return (count)
 
     @staticmethod
-    def transaction(invent1, invent2):
-        pass
+    def get_analytics(inventories):
+        print("=== Inventory Analytics ===")
+        most_valuable = ["", 0]
+        most_items = ["", 0]
+        rarest_items = []
+        for inventory in inventories:
+            if inventory.value > most_valuable[1]:
+                most_valuable[0] = inventory.player_name
+                most_valuable[1] = inventory.value
+
+            if inventory.get_items_count() > most_items[1]:
+                most_items[0] = inventory.player_name
+                most_items[1] = inventory.get_items_count()
+
+            for name, item_att in inventory.items.items():
+                if item_att.rarity == "rare":
+                    rarest_items.append(name)
+
+        print(f"Most valuable player: {most_valuable[0]} "
+              f"({most_valuable[1]} gold)")
+        print(f"Most items: {most_items[0]} ({most_items[1]} items)")
+        print("Rarest items: ", end="")
+        for i in range(len(rarest_items)):
+            if i + 1 < len(rarest_items):
+                print(f"{rarest_items[i]}, ", end="")
+            else:
+                print(f"{rarest_items[i]}")
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
     invent1 = Inventory("Alice")
     invent1.add_item("sword", "weapon", "rare", 500, 1)
     invent1.add_item("potion", "consumable", "common", 50, 5)
     invent1.add_item("shield", "armor", "uncommon", 200, 1)
+    invent2 = Inventory("Bob")
+    invent2.add_item("sword", "weapon", "rare", 500, 2)
+    invent2.add_item("potion", "consumable", "common", 50, 2)
+    invent2.add_item("magic_ring", "armor", "rare", 200, 1)
     print("")
     invent1.get_inventory_info()
+    invent1.transaction_to(invent2, "potion", 1)
+    Inventory.get_analytics([invent1, invent2])
