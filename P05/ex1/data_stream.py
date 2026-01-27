@@ -5,13 +5,13 @@ from abc import ABC, abstractmethod
 
 def ft_len(data: Any) -> int:
     i = 0
-    for datum in data:
+    for _ in data:
         i += 1
     return i
 
 
 class DataStream(ABC):
-    def __init__(self, stream_id: str):
+    def __init__(self, stream_id: str) -> None:
         self.stream_id = stream_id
         self.processed_batches = 0
         self.processed_data = []
@@ -36,10 +36,8 @@ class DataStream(ABC):
 
 
 class SensorStream(DataStream):
-    def __init__(self, stream_id: str):
+    def __init__(self, stream_id: str) -> None:
         super().__init__(stream_id)
-        print("Initializing Sensor Stream...")
-        print(f"Stream ID: {self.stream_id}, Type: Environmental Data")
 
     def process_batch(self, data_batch: List[Any]) -> str:
         self.processed_batches += 1
@@ -53,7 +51,7 @@ class SensorStream(DataStream):
 
 
 class TransactionStream(DataStream):
-    def __init__(self, stream_id: str):
+    def __init__(self, stream_id: str) -> None:
         super().__init__(stream_id)
         print("Initializing Transaction Stream...")
         print(f"Stream ID: {self.stream_id}, Type: Financial Data")
@@ -71,7 +69,7 @@ class TransactionStream(DataStream):
 
 
 class EventStream(DataStream):
-    def __init__(self, stream_id: str):
+    def __init__(self, stream_id: str) -> None:
         super().__init__(stream_id)
         print("Initializing Event Stream...")
         print(f"Stream ID: {self.stream_id}, Type: System Events")
@@ -93,7 +91,7 @@ class EventStream(DataStream):
 
 
 class StreamProcessor:
-    def __init__(self):
+    def __init__(self) -> None:
         self.streams = []
 
     def add_stream(self, stream: DataStream) -> None:

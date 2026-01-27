@@ -16,13 +16,10 @@ class DataProcessor(ABC):
         print(output)
         return (output)
 
-    def validate(self, data: Any) -> bool:
-        if data is None or DataProcessor.ft_len(data) == 0:
-            return (False)
-        else:
-            return (True)
-
     @abstractmethod
+    def validate(self, data: Any) -> bool:
+        return True
+
     def format_output(self, result: str) -> str:
         try:
             return f"Processed data: {DataProcessor.ft_len(result)}"
@@ -53,6 +50,18 @@ class NumericProcessor(DataProcessor):
             print("Validation: Numeric data verified")
         output = self.format_output(data)
         return (output)
+
+    def validate(self, data: Any) -> bool:
+        for datum in data:
+            try:
+                datum += ""
+                return (False)
+            except Exception:
+                return (True)
+        if data is None or DataProcessor.ft_len(data) == 0:
+            return (False)
+        else:
+            return (True)
 
     def format_output(self, result: str) -> str:
         try:
@@ -87,6 +96,18 @@ class TextProcessor(DataProcessor):
             print("Validation: Text data verified")
         output = self.format_output(data)
         return (output)
+
+    def validate(self, data: Any) -> bool:
+        for datum in data:
+            try:
+                datum += ""
+                return (True)
+            except Exception:
+                return (False)
+        if data is None or DataProcessor.ft_len(data) == 0:
+            return (False)
+        else:
+            return (True)
 
     def format_output(self, data: str) -> str:
         try:
@@ -124,6 +145,12 @@ class LogProcessor(DataProcessor):
         return (output)
 
     def validate(self, data: str) -> bool:
+        for datum in data:
+            try:
+                datum += ""
+                return (True)
+            except Exception:
+                return (False)
         if data is None or DataProcessor.ft_len(data) == 0:
             return (False)
         else:
