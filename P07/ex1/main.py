@@ -35,4 +35,5 @@ if __name__ == "__main__":
                                  'available_mana': 7})
     print(game_state)
 
-    print("\nPolymorphism in action: Same interface, different card behaviors!")
+    print("\nPolymorphism in action: Same interface, "
+          "different card behaviors!")
