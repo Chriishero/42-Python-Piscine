@@ -1,25 +1,18 @@
 import sys
-
-
-def get_base_prefix():
-    return (
-        getattr(sys, "base_prefix", None)
-        or getattr(sys, "real_prefix", None)
-        or sys.prefix
-    )
+import site
 
 
 def in_venv():
-    return sys.prefix != get_base_prefix()
+    return sys.prefix != sys.base_prefix
 
 
 if __name__ == "__main__":
     curr_python = sys.executable
 
-    if in_venv() is False:
+    if not in_venv():
         print("\nMATRIX STATUS: You're still plugged in\n\n"
               f"Current Python: {curr_python}\n"
-              "VIrtual Environment: None detected\n\n"
+              "Virtual Environment: None detected\n\n"
               "WARNING: You're in the global envionment!\n"
               "The machines can see everything you install.\n\n"
               "To enter the construct, run:\n"
@@ -31,7 +24,7 @@ if __name__ == "__main__":
               "Then run this program again.")
     else:
         environment_path = sys.prefix
-        site_packages = curr_python[4]
+        site_packages = site.getusersitepackages()
         print("\nMATRIX STATUS: Welcome to the construct\n\n"
               f"Current Python: {curr_python}\n"
               "Virtual Environment: matrix_env\n"
