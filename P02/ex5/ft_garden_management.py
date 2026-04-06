@@ -213,7 +213,7 @@ class GardenManager:
         print("System recovered and continuing...")
 
 
-if __name__ == "__main__":
+def test_garden_management():
     gm = GardenManager()
     gm.add_garden(Garden("Chris", 9))
     print("== Garden Management System ===\n")
@@ -223,3 +223,7 @@ if __name__ == "__main__":
     gm.watering_garden_plants("Chris")
     gm.check_garden_health("Chris")
     gm.error_recovery()
+
+
+if __name__ == "__main__":
+    test_garden_management()

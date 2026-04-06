@@ -1,5 +1,5 @@
 
-def check_temperature(temp_str):
+def check_temperature(temp_str: str) -> int:
     """
     Check is the parameter 'temp_str' is a valid temperature for plants.
 
@@ -22,10 +22,14 @@ def check_temperature(temp_str):
     return (temp_nbr)
 
 
-# if __name__ == "__main__":
-#     print("=== Garden Temperature Checker ===\n")
-#     check_temperature("abc")
-#     check_temperature("12")
-#     check_temperature("100")
-#     check_temperature("-11")
-#     print("All tests completed - program didn't crash!")
+def test_temperature_input():
+    print("=== Garden Temperature Checker ===\n")
+    check_temperature("abc")
+    check_temperature("12")
+    check_temperature("100")
+    check_temperature("-11")
+    print("All tests completed - program didn't crash!")
+
+
+if __name__ == "__main__":
+    test_temperature_input()

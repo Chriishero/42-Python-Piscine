@@ -2,11 +2,7 @@
 import sys
 
 
-def score_analytics(scores: list):
-    if not scores:
-        print("No scores provided. Usage: python3 ft_score_analytics.py "
-              "<score1> <score2> ...")
-        return
+def score_analytics(scores: list[int]) -> None:
     n_players = len(scores)
     total_score = sum(int(score) for score in scores)
     average_score = total_score / n_players
@@ -22,11 +18,21 @@ def score_analytics(scores: list):
     print(f"Score range: {max_score - min_score}\n")
 
 
-if __name__ == "__main__":
+def main() -> None:
     argv = sys.argv
-    argc = len(argv)
+    valid_argv = list()
     print("=== Player Score Analytics ===")
     try:
-        score_analytics(argv[1:])
-    except ValueError:
-        print("Error: All arguments must be valid intergers")
+        for arg in argv[1:]:
+            try:
+                valid_argv.append(int(arg))
+            except ValueError:
+                print(f"Invalid parameter: '{arg}'")
+        score_analytics(valid_argv)
+    except Exception:
+        print("No scores provided. Usage: python3 ft_score_analytics.py "
+              "<score1> <score2> ...")
+
+
+if __name__ == "__main__":
+    main()

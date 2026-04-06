@@ -1,107 +1,41 @@
 
-def lcg_pseudogen(modulus, a, c, seed, bounds):
+import random
+from typing import Generator
+
+
+def gen_event() -> Generator[tuple[str, str], None, None]:
+    name_list = ["alice", "bob", "charlie", "dylan"]
+    action_list = ["run", "eat", "sleep", "grab", "move", "swim", "climb"]
     while True:
-        seed = (a * seed + c) % modulus
-        norm = seed / modulus
-        res = bounds[0] + norm * (bounds[1] - bounds[0])
-        for i in range(bounds[0], bounds[1]):
-            if i > res:
-                yield i - 1
-                break
+        yield (random.choice(name_list), random.choice(action_list))
 
 
-class Stream:
-    def __init__(self):
-        self.total_event = 0
-        self.high_level = 0
-        self.treasure_events = 0
-        self.levelup_events = 0
-
-    def update_analytics(self, event):
-        self.total_event += 1
-        if event["level"] >= 10:
-            self.high_level += 1
-        if event["type"] == "found treasure":
-            self.treasure_events += 1
-        if event["type"] == "leveled up":
-            self.levelup_events += 1
-
-    def get_analytics(self):
-        print("=== Stream Analytics ===")
-        print(f"Total events processed: {self.total_event}")
-        print(f"High-level players (10+): {self.high_level}")
-        print(f"Treasure events: {self.treasure_events}")
-        print(f"Level-up events: {self.levelup_events}\n")
-        print("Memory usage: Constant (streaming)")
+def build_list(n: int) -> list[tuple[str, str]]:
+    gen = gen_event()
+    event_list: list[tuple[str, str]] = []
+    for _ in range(n):
+        event_list.append(next(gen))
+    return event_list
 
 
-class GameData:
-    @staticmethod
-    def generator():
-        players = ["alice", "bob", "charlie", "chris", "donald", "eve"]
-        event_types = ["killed monster", "found treasure",
-                       "leveled up", "death"]
-        p_gen = lcg_pseudogen(2**31 - 1, 48271, 0, 1, [0, len(players)])
-        type_gen = lcg_pseudogen(2**31 - 1, 48271, 0, 7, [0, len(event_types)])
-        lvl_gen = lcg_pseudogen(2**31 - 1, 48271, 0, 42, [1, 15])
-        while True:
-            player = players[next(p_gen)]
-            event_type = event_types[next(type_gen)]
-            level = next(lvl_gen)
-            yield {"player": player, "level": level, "type": event_type}
+def consume_event(event_list:
+                  list[tuple[str, str]]) -> Generator[tuple[str, str]]:
+    while event_list:
+        index = random.randrange(len(event_list))
+        yield event_list.pop(index)
 
 
-def fibonacci_sequence():
-    a, b = 0, 1
-    while True:
-        yield a
-        a, b = b, a + b
-
-
-def prime_number():
-    n = 2
-    while True:
-        prime = True
-        for denom in range(1, n):
-            if n % denom == 0 and denom != 1 and denom != n:
-                prime = False
-        if prime is True:
-            yield n
-        n += 1
-
-
-def generator(n_fibonnaci, n_prime):
-    print("=== Generator Demonstration ===")
-    gen = fibonacci_sequence()
-    print(f"Fibonacci sequence (first {n_fibonnaci}): ", end="")
-    for i in range(n_fibonnaci):
-        if i + 1 < n_fibonnaci:
-            print(next(gen), end=", ")
-        else:
-            print(next(gen))
-
-    gen = prime_number()
-    print(f"Prime numbers (first {n_prime}): ", end="")
-    for i in range(n_prime):
-        if i + 1 < n_prime:
-            print(next(gen), end=", ")
-        else:
-            print(next(gen))
+def main() -> None:
+    gen = gen_event()
+    for i in range(1000):
+        name, action = next(gen)
+        print(f"Event {i}: Player {name} did action {action}")
+    event_list = build_list(10)
+    print(f"Built list of 10 events: {event_list}")
+    for event in consume_event(event_list):
+        print(f"Got event from list: {event}")
+        print(f"Remains in list: {event_list}")
 
 
 if __name__ == "__main__":
-    print("=== Game Data Stream Processor ===\n")
-    n = 1000
-    print(f"Processing {n} game events...\n")
-    gen = GameData.generator()
-    stream = Stream()
-    for i in range(1, n + 1):
-        event = next(gen)
-        if i <= 3:
-            print(f"Event {i}: Player {event['player']} "
-                  f"(level {event['level']}) {event['type']}")
-        stream.update_analytics(event)
-    print("...\n")
-    stream.get_analytics()
-    print("")
-    generator(10, 10)
+    main()
