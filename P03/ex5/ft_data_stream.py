@@ -19,7 +19,7 @@ def build_list(n: int) -> list[tuple[str, str]]:
 
 
 def consume_event(event_list:
-                  list[tuple[str, str]]) -> Generator[tuple[str, str]]:
+                  list[tuple[str, str]]) -> Generator[tuple[str, str], None, None]:
     while event_list:
         index = random.randrange(len(event_list))
         yield event_list.pop(index)

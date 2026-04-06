@@ -1,19 +1,47 @@
 
-if __name__ == "__main__":
-    print("=== CYBER ARCHIVES - PRESERVATION SYSTEM ===")
-    filename = "new_discovery.txt"
-    print(f"Initializing new storage unit: {filename}")
+import sys
+import typing
+
+
+def add_archive_char(content: str, archive_char: str) -> str:
+    lines = content.splitlines()
+    new_lines = [line + archive_char for line in lines]
+    return '\n'.join(new_lines) + ('\n' if content.endswith('\n') else '')
+
+
+def main() -> None:
+    argv = sys.argv[1:]
+    if len(argv) != 1:
+        print("Usage: ft_archive_creation.py <file>")
+        return
+    print("=== Cyber Archives Recovery & Preservation ===")
+    arg = argv[0]
+    print(f"Accessing file '{arg}'")
     try:
-        with open(filename, 'w') as f:
-            print("Storage unit created successfully...")
-            print("Inscribing preservation data...")
-            f.write("[ENTRY 001] New quantum algorithm discovered\n")
-            f.write("[ENTRY 002] Efficiency increased by 347%\n")
-            f.write("[ENTRY 003] Archived by Data Archivist trainee\n")
-            print("[ENTRY 001] New quantum algorithm discovered")
-            print("[ENTRY 002] Efficiency increased by 347%")
-            print("[ENTRY 003] Archived by Data Archivist trainee")
-            print("Data inscription complete. Storage unit sealed.")
-            print(f"Archive '{filename}' ready for long-term preservation.")
-    except Exception:
-        print("ERROR: Storage unit creation failed.")
+        f: typing.IO[str] = open(arg, "r")
+        content = f.read()
+        print("---")
+        print(content, end="")
+        print("---")
+        f.close()
+        print(f"File '{arg}' closed.")
+        print("Transform data:")
+        new_content = add_archive_char(content, '#')
+        print("---")
+        print(new_content, end="")
+        print("---")
+        new_file_name = input("Enter new file name (or empty): ")
+        if new_file_name.strip():
+            print(f"Saving data to '{new_file_name}'")
+            f = open(new_file_name, "w")
+            f.write(new_content)
+            f.close()
+            print(f"Data saved in file '{new_file_name}'.")
+        else:
+            print("Not saving data.")
+    except Exception as e:
+        print(f"Error opening file '{arg}': {e}")
+
+
+if __name__ == "__main__":
+    main()

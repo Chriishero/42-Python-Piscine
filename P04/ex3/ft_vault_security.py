@@ -1,21 +1,41 @@
 
-if __name__ == "__main__":
-    print("=== CYBER ARCHIVES - VAULT SECURITY SYSTEM ===")
-    print("Initiating secure vault access...")
-    print("Vault connection established with failsafe protocols")
+def secure_archive(
+    file_name: str,
+    action: str,
+    content: str
+) -> tuple[bool, str]:
     try:
-        with open("classified_data.txt", 'r') as f:
-            print("SECURE EXTRACTION:")
-            content = f.read().strip()
-            for line in content.split('\n'):
-                print(f"[CLASSIFIED] {line}")
-        with open("security_log.txt", 'w') as f:
-            f.write("[CLASSIFIED] New security protocols archived\n")
-            print("SECURE PRESERVATION:")
-            print("[CLASSIFIED] New security protocols archived")
-        print("Vault automatically sealed upon completion")
-        print("All vault operations completed with maximum security.")
-    except FileNotFoundError:
-        print("ERROR: Required vault files not found.")
+        with open(file_name, action) as f:
+            if action == 'r':
+                content = f.read()
+                return (True, content)
+            elif action == 'w':
+                f.write(content)
+                return (True, "Content successfully written to file")
     except Exception as e:
-        print(f"ERROR: {e}")
+        return (False, str(e))
+    return (False, "")
+
+
+def main() -> None:
+    print("=== Cyber Archives Security ===")
+
+    print("Using 'secure_archive' to read from a nonexistent file:")
+    print(secure_archive("/not/existing/file", 'r', ""))
+    print()
+
+    print("Using 'secure_archive' to read from a inaccessible file:")
+    print(secure_archive("/etc/shadow", 'r', ""))
+    print()
+
+    print("Using 'secure_archive' to read from a regular file:")
+    archive = secure_archive("../ex0/ft_ancient_text.py", 'r', "")
+    print(archive)
+    print()
+
+    print("Using 'secure_archive' to write previous content to a new file:")
+    print(secure_archive("new_file.txt", 'w', archive[1]))
+
+
+if __name__ == "__main__":
+    main()
