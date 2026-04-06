@@ -2,15 +2,14 @@
 import sys
 
 if __name__ == "__main__":
-    print("=== CYBER ARCHIVES - COMMUNICATION SYSTEM ===\n")
+    print("=== CYBER ARCHIVES - COMMUNICATION SYSTEM ===")
     try:
         archivist_id = input("Input Stream active. Enter archivist ID: ")
         report = input("Input Stream active. Enter status report: ")
-        sys.stdout.write(f"\n[STANDARD] Archive status from {archivist_id}: "
-                         f"{report}\n")
-        sys.stderr.write("[ALERT] System diagnostic: Communication channels "
-                         "verified\n")
-        sys.stdout.write("[STANDARD] Data Transmission complete.\n")
-        print("\nThree-channel communication test successfull.")
+        print(f"[STANDARD] Archive status from {archivist_id}: {report}")
+        print("[ALERT] System diagnostic: Communication channels verified",
+              file=sys.stderr)
+        print("[STANDARD] Data transmission complete")
+        print("Three-channel communication test successful.")
     except Exception as e:
-        sys.stderr.write(f"[ALERT] Error: {e}")
+        print(f"[ALERT] Error: {e}", file=sys.stderr)

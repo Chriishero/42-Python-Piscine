@@ -1,34 +1,46 @@
 
 if __name__ == "__main__":
-    print("=== CYBER ARCHIVES - CRISIS RESPONSE SYSTEM ===\n")
-    print("CRISIS ALERT: Attempting access to 'lost_archives.txt'...")
+    print("=== CYBER ARCHIVES - CRISIS RESPONSE SYSTEM ===")
+    print("CRISIS ALERT: Attempting access to 'lost_archive.txt'...")
     try:
-        with open("lost_archives.txt", 'r') as f:
-            print(f"SUCCESS: Archive recovered - '{f.read()}'")
+        with open("lost_archive.txt", 'r') as f:
+            content = f.read().strip()
+            print(f"SUCCESS: Archive recovered - '{content}'")
     except FileNotFoundError:
         print("RESPONSE: Archive not found in storage matrix")
     except PermissionError:
         print("RESPONSE: Security protocols deny access")
-    print("STATUS: Crisis handled, system stable\n")
+    except Exception:
+        print("RESPONSE: Unexpected system anomaly detected")
+    print("STATUS: Crisis handled, system stable")
+    print()
 
     print("CRISIS ALERT: Attempting access to 'classified_vault.txt'...")
     try:
         with open("classified_vault.txt", 'r') as f:
-            print(f"SUCCESS: Archive recovered - '{f.read()}'")
+            content = f.read().strip()
+            print(f"SUCCESS: Archive recovered - '{content}'")
     except FileNotFoundError:
         print("RESPONSE: Archive not found in storage matrix")
     except PermissionError:
         print("RESPONSE: Security protocols deny access")
-    print("STATUS: Crisis handled, system maintained\n")
+    except Exception:
+        print("RESPONSE: Unexpected system anomaly detected")
+    print("STATUS: Crisis handled, security maintained")
+    print()
 
-    print("ROUTINE ACCESS: Attempting access to 'standard_archives.txt'...")
+    print("ROUTINE ACCESS: Attempting access to 'standard_archive.txt'...")
     try:
         with open("standard_archive.txt", 'r') as f:
-            print(f"SUCCESS: Archive recovered - '{f.read()}'")
+            content = f.read().strip()
+            print(f"SUCCESS: Archive recovered - '{content}'")
     except FileNotFoundError:
         print("RESPONSE: Archive not found in storage matrix")
     except PermissionError:
         print("RESPONSE: Security protocols deny access")
-    print("STATUS: Normal operations resumed\n")
+    except Exception:
+        print("RESPONSE: Unexpected system anomaly detected")
+    print("STATUS: Normal operations resumed")
+    print()
 
     print("All crisis scenarios handled successfully. Archives secure.")
