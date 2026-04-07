@@ -1,4 +1,3 @@
-
 from abc import ABC, abstractmethod
 from typing import Any
 
@@ -112,73 +111,43 @@ class LogProcessor(DataProcessor):
             raise ValueError("Improper log data")
 
 
-class DataStream:
-    def __init__(self) -> None:
-        self._processors: list[DataProcessor] = []
-
-    def register_processor(self, proc: DataProcessor) -> None:
-        self._processors.append(proc)
-
-    def process_stream(self, stream: list[Any]) -> None:
-        for item in stream:
-            processed = False
-            for proc in self._processors:
-                if proc.validate(item):
-                    proc.ingest(item)
-                    processed = True
-                    break
-            if not processed:
-                print("DataStream error - "
-                      f"Can't process element in stream: {item}")
-
-    def print_processors_stats(self) -> None:
-        print("== DataStream statistics ==")
-        if not self._processors:
-            print("No processor found, no data\n")
-            return
-        for proc in self._processors:
-            name = type(proc).__name__
-            total = len(proc._data) + proc._rank
-            remaining = len(proc._data)
-            print(f"{name}: total {total} items processed, "
-                  f"remaining {remaining} on processor")
-
-
 def main() -> None:
-    print("=== Code Nexus - Data Stream ===\n")
-    print("Initialize Data Stream...")
-    ds = DataStream()
-    ds.print_processors_stats()
-    print("Registering Numeric Processor\n")
+    print("=== Code Nexus - Data Processor ===\n")
+    print("Testing Numeric Processor...")
     np = NumericProcessor()
-    ds.register_processor(np)
-    batch = ['Hello world', [3.14, -1, 2.71],
-             [{'log_level': 'WARNING',
-               'log_message': 'Telnet access! Use ssh instead'},
-              {'log_level': 'INFO',
-               'log_message': 'User wil is connected'}], 42, ['Hi', 'five']]
-    print(f"Send first batch of data on stream: {batch}")
-    ds.process_stream(batch)
-    ds.print_processors_stats()
-    print()
-    print("Registering other data processors")
-    tp = TextProcessor()
-    lp = LogProcessor()
-    ds.register_processor(tp)
-    ds.register_processor(lp)
-    print("Send the same batch again")
-    ds.process_stream(batch)
-    ds.print_processors_stats()
-    print()
-    print("Consume some elements from the data processors: "
-          "Numeric 3, Text 2, Log 1")
+    print(f" Trying to validate input '42': {np.validate('42')}")
+    print(f" Trying to validate input 'Hello': {np.validate('Hello')}")
+    print(" Test invalid ingestion of string 'foo' without prior validation:")
+    try:
+        np.ingest('foo')  # type: ignore
+    except Exception as e:
+        print(f" Got exception: {e}")
+    np.ingest([1, 2, 3, 4, 5])
+    print(" Processing data: [1, 2, 3, 4, 5]")
+    print(" Extracting 3 values...")
     for _ in range(3):
-        np.output()
+        rank, val = np.output()
+        print(f" Numeric value {rank}: {val}")
+    print("\nTesting Text Processor...")
+    tp = TextProcessor()
+    print(f" Trying to validate input '42': {tp.validate('42')}")
+    tp.ingest(['Hello', 'Nexus', 'World'])
+    print(" Processing data: ['Hello', 'Nexus', 'World']")
+    print(" Extracting 1 value...")
+    rank, val = tp.output()
+    print(f" Text value {rank}: {val}")
+    print("\nTesting Log Processor...")
+    lp = LogProcessor()
+    print(f" Trying to validate input 'Hello': {lp.validate('Hello')}")
+    lp.ingest([{'log_level': 'NOTICE', 'log_message': 'Connection to server'},
+               {'log_level': 'ERROR', 'log_message': 'Unauthorized access!!'}])
+    print(" Processing data: [{'log_level': 'NOTICE',"
+          "'log_message': 'Connection to server'}, "
+          "{'log_level': 'ERROR', 'log_message': 'Unauthorized access!!'}]")
+    print(" Extracting 2 values...")
     for _ in range(2):
-        tp.output()
-    for _ in range(1):
-        lp.output()
-    ds.print_processors_stats()
+        rank, val = lp.output()
+        print(" Log entry", rank, ":", val)
 
 
 if __name__ == "__main__":

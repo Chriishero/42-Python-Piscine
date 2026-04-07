@@ -1,26 +1,12 @@
-from . import elements
+from .elements import create_earth, create_air
+from elements import create_fire, create_water
 
 
-def healing_potion():
+def healing_potion() -> str:
     return ("Healing potion brewed with "
-            f"{elements.create_fire()} "
-            f"and {elements.create_water()}")
+            f"'{create_earth()}' and '{create_air()}'")
 
 
-def strength_potion():
+def strength_potion() -> str:
     return ("Strength potion brewed with "
-            f"{elements.create_earth()} "
-            f"and {elements.create_fire()}")
-
-
-def invisibility_potion():
-    return ("Invisibility potion brewed with "
-            f"{elements.create_earth()} "
-            f"and {elements.create_water()}")
-
-
-def wisdom_potion():
-    return ("Wisdom potion brewed with all elements: "
-            f"{elements.create_fire()}, {elements.create_water()}, "
-            f"{elements.create_earth()}, "
-            f"{elements.create_earth()}")
+            f"'{create_fire()}' and '{create_water()}'")
