@@ -18,7 +18,7 @@ def secure_archive(
 
 
 def main() -> None:
-    print("=== Cyber Archives Security ===")
+    print("=== Cyber Archives Security ===\n")
 
     print("Using 'secure_archive' to read from a nonexistent file:")
     print(secure_archive("/not/existing/file", 'r', ""))
@@ -29,12 +29,15 @@ def main() -> None:
     print()
 
     print("Using 'secure_archive' to read from a regular file:")
-    archive = secure_archive("../ex0/ft_ancient_text.py", 'r', "")
+    success, content = archive = secure_archive("../ex0/ft_ancient_text.py",
+                                                'r', "")
     print(archive)
-    print()
 
-    print("Using 'secure_archive' to write previous content to a new file:")
-    print(secure_archive("new_file.txt", 'w', archive[1]))
+    if success:
+        print()
+        print("Using 'secure_archive' to write previous content "
+              "to a new file:")
+        print(secure_archive("new_file.txt", 'w', content))
 
 
 if __name__ == "__main__":

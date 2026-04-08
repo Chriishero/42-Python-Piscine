@@ -15,7 +15,7 @@ def main() -> None:
         f: typing.IO[str] = open(arg, "r")
         content = f.read()
         print("---")
-        print(content, end="")
+        print(content)
         print("---")
         f.close()
         print(f"File '{arg}' closed.")

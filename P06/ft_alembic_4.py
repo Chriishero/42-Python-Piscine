@@ -9,7 +9,7 @@ def main() -> None:
     print("This will raise an exception!")
     print("Testing the hidden create_earth: ", end="")
     try:
-        print(f"{alchemy.create_earth()}")  # type: ignore[attr-defined]
+        print(f"{alchemy.create_earth()}")
     except AttributeError as e:
         print(f"Traceback (most recent call last):\n  {e}")
 
