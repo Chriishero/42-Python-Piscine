@@ -113,6 +113,7 @@ class LogProcessor(DataProcessor):
 
 def main() -> None:
     print("=== Code Nexus - Data Processor ===\n")
+
     print("Testing Numeric Processor...")
     np = NumericProcessor()
     print(f" Trying to validate input '42': {np.validate('42')}")
@@ -122,28 +123,33 @@ def main() -> None:
         np.ingest('foo')  # type: ignore
     except Exception as e:
         print(f" Got exception: {e}")
-    np.ingest([1, 2, 3, 4, 5])
-    print(" Processing data: [1, 2, 3, 4, 5]")
+    data_num: list[int | float] = [1, 2, 3, 4, 5]
+    np.ingest(data_num)
+    print(" Processing data: ", data_num)
     print(" Extracting 3 values...")
     for _ in range(3):
         rank, val = np.output()
         print(f" Numeric value {rank}: {val}")
+
     print("\nTesting Text Processor...")
     tp = TextProcessor()
     print(f" Trying to validate input '42': {tp.validate('42')}")
-    tp.ingest(['Hello', 'Nexus', 'World'])
-    print(" Processing data: ['Hello', 'Nexus', 'World']")
+    data_str: list[str] = ['Hello', 'Nexus', 'World']
+    tp.ingest(data_str)
+    print(" Processing data: ", data_str)
     print(" Extracting 1 value...")
     rank, val = tp.output()
     print(f" Text value {rank}: {val}")
+
     print("\nTesting Log Processor...")
     lp = LogProcessor()
     print(f" Trying to validate input 'Hello': {lp.validate('Hello')}")
-    lp.ingest([{'log_level': 'NOTICE', 'log_message': 'Connection to server'},
-               {'log_level': 'ERROR', 'log_message': 'Unauthorized access!!'}])
-    print(" Processing data: [{'log_level': 'NOTICE',"
-          "'log_message': 'Connection to server'}, "
-          "{'log_level': 'ERROR', 'log_message': 'Unauthorized access!!'}]")
+    data_log: list[dict[str, str]] = [{'log_level': 'NOTICE',
+                                       'log_message': 'Connection to server'},
+                                      {'log_level': 'ERROR',
+                                       'log_message': 'Unauthorized access!!'}]
+    lp.ingest(data_log)
+    print(" Processing data: ", data_log)
     print(" Extracting 2 values...")
     for _ in range(2):
         rank, val = lp.output()
