@@ -17,20 +17,22 @@ def main() -> None:
         print("Configuration loaded:")
     print("Mode:", MATRIX_MODE)
     if MATRIX_MODE == 'production':
-        print(f"Database: {("Connected to PRODUCTION instance" if DATABASE_URL
-                            else "Not connected")}")
-        print(f"API Access: {(str(API_KEY)[:4] + "*****" if API_KEY
-                              else None)}")
+        db_status = ('Connected to PRODUCTION instance' if DATABASE_URL
+                     else 'Not connected')
+        print(f"Database: {db_status}")
+        api = (str(API_KEY)[:4] + '*****' if API_KEY else None)
+        print(f"API Access: {api}")
     elif MATRIX_MODE == 'development':
-        print(f"Database: {("Connected to local instance" if DATABASE_URL
-                            else "Not connected")}")
-        print(f"API Access: {"Authenticated" if API_KEY else None}")
+        db_status = ('Connected to local instance' if DATABASE_URL
+                     else 'Not connected')
+        print(f"Database: {db_status}")
+        print(f"API Access: {'Authenticated' if API_KEY else None}")
     else:
         print("Database: Not connected")
         print("API Access: Not authenticated")
 
     print("Log Level:", LOG_LEVEL)
-    print(f"Zion Network: {"Online" if ZION_ENDPOINT else "Offline"}")
+    print(f"Zion Network: {'Online' if ZION_ENDPOINT else 'Offline'}")
 
     print()
     print("Environment security check:")
