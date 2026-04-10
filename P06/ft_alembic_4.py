@@ -8,10 +8,7 @@ def main() -> None:
     print("Now show that not all functions can be reached")
     print("This will raise an exception!")
     print("Testing the hidden create_earth: ", end="")
-    try:
-        print(f"{alchemy.create_earth()}")
-    except AttributeError as e:
-        print(f"Traceback (most recent call last):\n  {e}")
+    print(f"{alchemy.create_earth()}")
 
 
 if __name__ == "__main__":

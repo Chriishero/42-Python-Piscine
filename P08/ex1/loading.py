@@ -2,29 +2,30 @@ import importlib
 import sys
 
 
-def check_dependencies(packages: list) -> dict:
-    imported = {}
-
-    for pkg in packages:
+def check_dependencies(dependencies: list[tuple[str, str]]) -> None:
+    missing: list[str] = []
+    print("Checking dependencies:")
+    for pkg, msg in dependencies:
         try:
-            imported[pkg] = importlib.import_module(pkg)
+            module = importlib.import_module(pkg)
+            print(f" [OK] {pkg} ({module.__version__}) - {msg} ready")
         except ImportError:
-            print(f"Error: the package '{pkg}' is not installed.\n"
-                  "Try,\n"
-                  "pip install -r requirements.txt\n"
-                  "or\n"
-                  "poetry install")
-            sys.exit(1)
-    return imported
+            print(f" [MISSING] {pkg} - {msg} not ready")
+            missing.append(pkg)
+    if missing:
+        print(f"\nMissing packages {', '.join(missing)}")
+        print("Install with pip:    pip install -r requirements.txt")
+        print("Install with Poetry: poetry install")
+        sys.exit(1)
 
 
-def process_data(min: int, max: int, n: int, modules: dict) -> None:
-    np = modules["numpy"]
-    pd = modules["pandas"]
-    plt = importlib.import_module("matplotlib.pyplot")
-    filename = "_analysis.png"
+def process_and_save(n: int, min: int, max: int,
+                     filename: str = "matrix_analysis.png") -> None:
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
 
-    print("\nAnalyzing Matrix data...")
+    print("Analyzing Matrix data...")
     print(f"Processing {n} data points...")
     X = np.linspace(min, max, n)
     y = np.sin(X) + 0.5 * np.cos(2 * X)
@@ -32,7 +33,6 @@ def process_data(min: int, max: int, n: int, modules: dict) -> None:
         "X": X,
         "y": y
     })
-
     print("Generating visualization...")
     plt.figure()
     plt.plot(df["X"], df["y"], color='r')
@@ -41,12 +41,15 @@ def process_data(min: int, max: int, n: int, modules: dict) -> None:
     print(f"Results save to: {filename}")
 
 
-if __name__ == "__main__":
+def main() -> None:
     print("\nLOADING STATUS: Loading programs...\n")
+    dependencies = [("pandas", "Data manipulation"),
+                    ("numpy", "Numerical computation"),
+                    ("matplotlib", "Visualization")]
+    check_dependencies(dependencies)
+    print()
+    process_and_save(0, 100, 1000)
 
-    modules = check_dependencies(["numpy", "pandas", "matplotlib", "requests"])
 
-    for name, module in modules.items():
-        print(f"[OK] {name} ({module.__version__}) - ready")
-
-    process_data(0, 20, 1000, modules)
+if __name__ == "__main__":
+    main()

@@ -2,7 +2,7 @@ import sys
 import site
 
 
-def in_venv():
+def in_venv() -> bool:
     return sys.prefix != sys.base_prefix
 
 
@@ -18,9 +18,7 @@ if __name__ == "__main__":
               "To enter the construct, run:\n"
               "python -m venv matrix_env\n"
               "source matrix_env/bin/activate # On Unix\n"
-              "matrix_env\n"
-              "Scripts\n"
-              "activate # On Windows\n\n"
+              "matrix_env/Scripts/activate # On Windows\n\n"
               "Then run this program again.")
     else:
         environment_path = sys.prefix
